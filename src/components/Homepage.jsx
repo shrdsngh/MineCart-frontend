@@ -3,11 +3,9 @@ import Navbar from "./Navbar";
 import styled from "@emotion/styled";
 import Card from "./Card";
 import axios from "../axios";
-import Login from "./Login";
 
 function Homepage() {
   const [products, setProducts] = useState("");
-  const [token, setToken] = useState();
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -16,13 +14,8 @@ function Homepage() {
     };
     fetchdata();
   }, []);
+
   // setToken();
-  if (!token) {
-    //eslint-disable-next-line
-    {
-      return <Login setToken={setToken} />;
-    }
-  }
 
   return (
     <Container>

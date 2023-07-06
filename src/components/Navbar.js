@@ -6,6 +6,10 @@ import { Link } from "react-router-dom";
 
 function Navbar() {
   const [{ basket }] = useStateValue();
+  const logout = () => {
+    console.log("logout clicked");
+    localStorage.clear("user");
+  };
   const navigate = useNavigate();
   return (
     <Container>
@@ -27,6 +31,7 @@ function Navbar() {
           <Link
             style={{ textDecoration: "none", marginRight: 15, color: "brown" }}
             to={"/login"}
+            onClick={logout}
           >
             logout
           </Link>

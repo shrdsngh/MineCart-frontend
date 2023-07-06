@@ -12,6 +12,7 @@ import Payment from "./components/Payment";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Orders from "./components/Orders";
+import PrivateComponent from "./components/PrivateComponent";
 
 const promise = loadStripe(
   "pk_test_51NMml8SG0P2qUZ5ruGVlKXwJlCMmIxRoAyVLixTVrWXac9RLVGa3GnfBo5UEVgiN9fbW72lpB4obzrkhymGftMhP006KrWwEWf"
@@ -23,21 +24,25 @@ function App() {
       <ToastContainer theme="colored"></ToastContainer>
       <BrowserRouter>
         <Routes>
+          <Route element={<PrivateComponent />}>
+            <Route path="/homepage" element={<Homepage />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/addproduct" element={<AddProduct />} />
+            <Route path="/address" element={<Address />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route
+              path="/payment"
+              element={
+                <Elements stripe={promise}>
+                  <Payment />
+                </Elements>
+              }
+            />
+          </Route>
           <Route path="/" element={<Home />} />
-          <Route path="/address" element={<Address />} />
-          <Route path="/checkout" element={<Checkout />} />
+
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/payment"
-            element={
-              <Elements stripe={promise}>
-                <Payment />
-              </Elements>
-            }
-          />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/addproduct" element={<AddProduct />} />
-          <Route path="/homepage" element={<Homepage />} />
+
           <Route path="/registration" element={<Registration />} />
         </Routes>
       </BrowserRouter>

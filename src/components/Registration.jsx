@@ -48,15 +48,16 @@ const Registration = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let regobj = { id, name, password, email, phone, country, address, gender };
-    // console.log(regobj);
+    console.log(regobj);
     if (Isvalidate()) {
-      fetch("http://localhost:8000/user", {
+      fetch("https://mine-cart-backend.vercel.app/register", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(regobj),
       })
         .then((res) => {
           toast.success("Registered successfully");
+          localStorage.setItem("user", JSON.stringify(regobj));
           navigate("/login");
         })
         .catch((err) => {
