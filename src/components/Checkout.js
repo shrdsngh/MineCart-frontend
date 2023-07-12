@@ -1,22 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStateValue } from "../StateProvider";
 import styled from "@emotion/styled";
 import Navbar from "./Navbar";
 import CurrencyFormat from "react-currency-format";
 import { getBasketTotal } from "../reducer";
 import { useNavigate } from "react-router-dom";
+import Baskets from "./Baskets";
 
 const Checkout = () => {
   const [{ basket }, dispatch] = useStateValue();
 
   const navigate = useNavigate();
 
-  const removeFromBasket = (e, id) => {
-    e.preventDefault();
-    dispatch({
-      type: "REMOVE_FROM_BASKET",
-      id: id,
-    });
+  const proceed = () => {
+    navigate("/address");
   };
 
   console.log("checkout >>>", basket);
@@ -28,20 +25,20 @@ const Checkout = () => {
         <ShoppingCart>
           <h2>Shopping Cart</h2>
 
-          {basket?.map((product) => (
-            <Product>
-              <Image>
-                <img src={product.image} alt="" />
-              </Image>
-              <Description>
-                <h4>{product.title}</h4>
-                <p>$ {product.price}</p>
-                <button onClick={(e) => removeFromBasket(e, product.id)}>
-                  Remove
-                </button>
-              </Description>
-            </Product>
-          ))}
+          {basket?.map((product, index) => {
+            return (
+              <Baskets
+                key={index}
+                qty={product.quantity}
+                image={product.image}
+                title={product.title}
+                price={product.price}
+                id={product.id}
+                vendor={product.vendor}
+                rating={product.rating}
+              />
+            );
+          })}
         </ShoppingCart>
 
         <Subtotal>
@@ -64,9 +61,7 @@ const Checkout = () => {
             prefix={" $ "}
           />
 
-          <button onClick={() => navigate("/address")}>
-            Proceed to Checkout
-          </button>
+          <button onClick={proceed}>Proceed to Checkout</button>
         </Subtotal>
       </Main>
     </Container>

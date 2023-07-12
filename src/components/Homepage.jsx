@@ -8,8 +8,14 @@ function Homepage() {
   const [products, setProducts] = useState("");
 
   useEffect(() => {
+    const config = {
+      headers: {
+        authorization: JSON.parse(localStorage.getItem("token")),
+      },
+    };
+
     const fetchdata = async () => {
-      const data = await axios.get("/products/get");
+      const data = await axios.get("/products/get", config);
       setProducts(data);
     };
     fetchdata();
@@ -25,17 +31,19 @@ function Homepage() {
       </Banner>
       <Main>
         {products &&
-          products?.data.map((product) => (
-            <Card
-              key={product._id}
-              image={product.url}
-              price={product.price}
-              rating={product.rating}
-              title={product.title}
-              vendor={product.vendor}
-            />
-          ))}
-        ;
+          products?.data.map((product) => {
+            return (
+              <Card
+                id={product._id}
+                image={product.url}
+                price={product.price}
+                rating={product.rating}
+                title={product.title}
+                vendor={product.vendor}
+                quantity={product.quantity}
+              />
+            );
+          })}
       </Main>
     </Container>
   );

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "../axios";
+import { useStateValue } from "../StateProvider";
 
 const Login = () => {
   const [password, passwordUpdate] = useState("");
   const [email, emailUpdate] = useState("");
 
   const usenavigate = useNavigate();
+  const [{}, dispatch] = useStateValue();
 
   useEffect(() => {
     const auth = localStorage.getItem("user");
@@ -21,25 +24,43 @@ const Login = () => {
     let obj = { email, password };
     console.warn(obj);
     if (validate()) {
-      let result = await fetch("https://mine-cart-backend.vercel.app/login", {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(obj),
-      });
-      console.log("here");
-      result = await result.json();
-      console.warn("result", result);
-      if (result.id) {
-        localStorage.setItem("user", JSON.stringify(result.email));
-        toast.success("Login Successful");
-        usenavigate("/homepage");
-      } else {
-        toast.error("Enter correct credentials");
-      }
+      axios
+        .post("/login", { email, password })
+        .then((res) => {
+          if (!res.data.error) {
+            dispatch({
+              type: "SET_USER",
+              user: res.data,
+            });
 
+            localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem("token", JSON.stringify(res.data.auth));
+            toast.success("Login Successful");
+            usenavigate("/homepage");
+          } else if (res.data.error) {
+            toast.error("enter correct credentials");
+          }
+        })
+        .catch((err) => console.warn(err));
+      //Partition here
+      // let result = await fetch("http://localhost:3001/login", {
+      //   method: "post",
+      //   headers: { "content-type": "application/json" },
+      //   body: JSON.stringify(obj),
+      // });
+      // console.log("here");
+      // result = await result.json();
+      // console.warn("result", result);
+      // if (result.id) {
+      //   localStorage.setItem("user", JSON.stringify(result.email));
+      //   toast.success("Login Successful");
+      //   usenavigate("/homepage");
+      // } else {
+      //   toast.error("Enter correct credentials");
+      // }
+      //Partition Here
       //  implement Login
       //  console.log("proceed");
-
       // fetch("http://localhost:3001/login/" + username)
       //   .then((res) => {
       //     return res.json();

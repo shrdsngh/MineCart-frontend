@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Address = () => {
   // eslint-disable-next-line
   const [{}, dispatch] = useStateValue();
-  const [fullName, setFullName] = useState("");
+  const [name, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
@@ -19,7 +19,7 @@ const Address = () => {
     dispatch({
       type: "SET_ADDRESS",
       item: {
-        fullName,
+        name,
         contact,
         email,
         address,
@@ -39,7 +39,7 @@ const Address = () => {
               type="text"
               placeholder="John Doe"
               onChange={(e) => setFullName(e.target.value)}
-              value={fullName}
+              value={name}
             />
           </InputContainer>
           <InputContainer>

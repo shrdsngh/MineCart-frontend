@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Navbar from "./Navbar";
 import axios from "../axios";
+import { useStateValue } from "../StateProvider";
 
 function Orders() {
+  const [{ user }] = useStateValue();
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    axios.post("/orders/get").then((res) => setOrders(res.data));
+    axios
+      .post("/orders/get", { email: user.userDetail.email })
+      .then((res) => setOrders(res.data));
   }, []);
   console.log(orders);
   return (
@@ -18,12 +22,30 @@ function Orders() {
           {orders.map((order) => {
             return (
               <OrderDetail>
+                <AddressComponent>
+                  <h4>Shipping Details</h4>
+                  <div>
+                    <p>
+                      <b>
+                        <i>Address: </i>
+                      </b>
+                      {order.address}
+                    </p>
+                    <p>
+                      <b>
+                        <i>Email: </i>
+                      </b>
+                      {order.email}
+                    </p>
+                  </div>
+                </AddressComponent>
                 <OrderBasket>
                   <h4>Order</h4>
                   <p>
                     Subtotal: $ <span>{order.price}</span>
                   </p>
                   {order.products.map((product) => {
+                    console.log("Idhar");
                     return (
                       <Product>
                         <Image>
@@ -31,6 +53,7 @@ function Orders() {
                         </Image>
                         <Description>
                           <h4>{product.title}</h4>
+                          <p>Quantity: {product.quantity}</p>
                           <p>$ {product.price}</p>
                           <p>Vendor: {product.vendor}</p>
                         </Description>
@@ -74,6 +97,19 @@ const OrderContainer = styled.div`
 const OrderDetail = styled.div`
   border-bottom: 1px solid lightgrey;
   padding-bottom: 20px;
+`;
+const AddressComponent = styled.div`
+  margin-top: 20px;
+
+  div {
+    margin-top: 10px;
+    margin-left: 10px;
+
+    p {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  }
 `;
 const OrderBasket = styled.div`
   margin-top: 20px;

@@ -9,7 +9,7 @@ import axios from "../axios";
 import { useNavigate } from "react-router-dom";
 
 function Payment() {
-  const [{ address, basket }, dispatch] = useStateValue();
+  const [{ address, basket }, user, dispatch] = useStateValue();
   const [clientSecret, setClientSecret] = useState("");
   const elements = useElements();
   const stripe = useStripe();
@@ -41,6 +41,7 @@ function Payment() {
         axios.post("/orders/add", {
           basket: basket,
           price: getBasketTotal(basket),
+          email: user?.email,
           address: address,
         });
 
@@ -85,7 +86,8 @@ function Payment() {
                   </Image>
                   <Description>
                     <h4>{product.title}</h4>
-                    <p>$ {product.price}</p>
+                    <p>Quantity: {product.quantity}</p>
+                    <p>$ {product.price * product.quantity}</p>
                   </Description>
                 </Product>
               ))}

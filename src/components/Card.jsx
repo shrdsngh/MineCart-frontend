@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Rating } from "@mui/material";
 import { useStateValue } from "../StateProvider";
+import { toast } from "react-toastify";
 
-function Card({ id, image, title, price, rating, vendor }) {
+function Card({ id, image, title, price, rating, vendor, quantity }) {
   const [{ basket }, dispatch] = useStateValue();
+
   console.log("Basket>>", basket);
   const addToBasket = (e) => {
     e.preventDefault();
+    toast.info("😁  Item Added", {
+      autoClose: 500,
+      position: toast.POSITION.TOP_CENTER,
+    });
     dispatch({
       type: "ADD_TO_BASKET",
       item: {
@@ -17,6 +23,7 @@ function Card({ id, image, title, price, rating, vendor }) {
         image,
         vendor,
         rating,
+        quantity: 1,
       },
     });
   };
@@ -34,8 +41,23 @@ function Card({ id, image, title, price, rating, vendor }) {
           precision={0.5}
           readOnly
         />
-        <p>${price}</p>
+
         <h6>Vendor: {vendor}</h6>
+        {/* <select
+          className="m-2 bg-warning rounded"
+          onClick={(e) => {
+            setQuantity(Number(e.target.value));
+          }}
+        >
+          {Array.from(Array(6), (e, i) => {
+            return (
+              <option key={(i = 1)} value={i + 1}>
+                {i + 1}
+              </option>
+            );
+          })}
+        </select> */}
+        <p>${price}</p>
         <button onClick={addToBasket}>Add To Cart</button>
       </Description>
     </Container>

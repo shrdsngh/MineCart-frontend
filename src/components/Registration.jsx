@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "../axios";
 
 const Registration = () => {
   const [id, idChange] = useState("");
@@ -50,19 +51,26 @@ const Registration = () => {
     let regobj = { id, name, password, email, phone, country, address, gender };
     console.log(regobj);
     if (Isvalidate()) {
-      fetch("https://mine-cart-backend.vercel.app/register", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(regobj),
-      })
-        .then((res) => {
-          toast.success("Registered successfully");
-          localStorage.setItem("user", JSON.stringify(regobj));
-          navigate("/login");
-        })
-        .catch((err) => {
-          toast.error("Failed: " + err.message);
-        });
+      axios
+        .post("/register", regobj)
+        .then((res) => alert(res.data.message))
+        .catch((err) => console.warn(err));
+      toast.info("Registered Successfully");
+      navigate("/login");
+      //Partition Here
+      // fetch("http://localhost:3001/register", {
+      //   method: "POST",
+      //   headers: { "content-type": "application/json" },
+      //   body: JSON.stringify(regobj),
+      // })
+      //   .then((res) => {
+      //     toast.success("Registered successfully");
+      //     localStorage.setItem("user", JSON.stringify(regobj));
+      //     navigate("/login");
+      //   })
+      //   .catch((err) => {
+      //     toast.error("Failed: " + err.message);
+      //   });
     }
   };
 
