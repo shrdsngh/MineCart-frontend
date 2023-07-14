@@ -6,8 +6,9 @@ import { toast } from "react-toastify";
 
 function Card({ id, image, title, price, rating, vendor, quantity }) {
   const [{ basket }, dispatch] = useStateValue();
-
-  console.log("Basket>>", basket);
+  const loginDet = localStorage.user;
+  // console.log("look", loginDet);
+  // console.log("Basket>>", basket);
   const addToBasket = (e) => {
     e.preventDefault();
     toast.info("😁  Item Added", {

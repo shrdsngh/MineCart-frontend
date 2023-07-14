@@ -33,9 +33,12 @@ const Login = () => {
               user: res.data,
             });
 
-            localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem(
+              "user",
+              JSON.stringify(res.data.userDetail.email)
+            );
             localStorage.setItem("token", JSON.stringify(res.data.auth));
-            toast.success("Login Successful");
+            toast.success("Login Successful", { autoClose: 1000 });
             usenavigate("/homepage");
           } else if (res.data.error) {
             toast.error("enter correct credentials");

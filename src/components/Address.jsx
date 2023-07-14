@@ -8,7 +8,9 @@ const Address = () => {
   // eslint-disable-next-line
   const [{}, dispatch] = useStateValue();
   const [name, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  var userDet = localStorage.user;
+  var newDet = userDet.replace(/['"]+/g, "");
+  const [email, setEmail] = useState(newDet);
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
 
@@ -46,6 +48,7 @@ const Address = () => {
             <p>Email</p>
             <input
               type="email"
+              readOnly="readonly"
               placeholder="example@example.com"
               onChange={(e) => setEmail(e.target.value)}
               value={email}

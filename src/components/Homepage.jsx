@@ -31,9 +31,10 @@ function Homepage() {
       </Banner>
       <Main>
         {products &&
-          products?.data.map((product) => {
+          products?.data.map((product, index) => {
             return (
               <Card
+                key={index}
                 id={product._id}
                 image={product.url}
                 price={product.price}

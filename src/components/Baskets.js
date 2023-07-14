@@ -4,9 +4,10 @@ import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { getBasketTotal } from "../reducer";
 
-function Baskets({ image, title, price, id, vendor, rating }) {
+function Baskets({ image, title, price, id, vendor, rating, qty }) {
   const [{ basket }, dispatch] = useStateValue();
-  const [quantity, setQuantity] = useState(1);
+
+  const [quantity, setQuantity] = useState(qty);
 
   const navigate = useNavigate();
 
@@ -18,12 +19,11 @@ function Baskets({ image, title, price, id, vendor, rating }) {
     });
   };
 
-  const totalAmount = Number(price) * Number(quantity);
+  const totalAmount = Number(price) * Number(qty);
 
   useEffect(() => {}, []);
 
   const qtyAdd = (e) => {
-    console.log("Added", quantity);
     dispatch({
       type: "ADD_QUANTITY",
       item: {
@@ -32,10 +32,11 @@ function Baskets({ image, title, price, id, vendor, rating }) {
       },
     });
     setQuantity(quantity + 1);
+    console.log("Added", quantity);
   };
 
   const qtySubtract = (e) => {
-    if (quantity >= 2) {
+    if (quantity > 1) {
       console.log("Subtracted", quantity);
       dispatch({
         type: "MINUS_QUANTITY",
@@ -44,13 +45,9 @@ function Baskets({ image, title, price, id, vendor, rating }) {
           quantity: quantity,
         },
       });
+      setQuantity(quantity - 1);
 
-      setQuantity(quantity);
-      if (quantity > 1) {
-        setQuantity(quantity - 1);
-      } else {
-        console.log("cannot go lower");
-      }
+      console.log("cannot go lower");
     }
   };
 
@@ -67,7 +64,7 @@ function Baskets({ image, title, price, id, vendor, rating }) {
           <button className="m-2 bg-danger rounded" onClick={qtySubtract}>
             ➖
           </button>
-          {quantity}
+          {qty}
           <button className="m-2 bg-success rounded" onClick={qtyAdd}>
             ➕
           </button>

@@ -3,11 +3,15 @@ import { styled } from "styled-components";
 import { useStateValue } from "../StateProvider";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { getBasketTotal } from "../reducer";
 
 function Navbar() {
-  const [{ basket }] = useStateValue();
+  const [{ basket }, dispatch] = useStateValue();
   const logout = () => {
     console.log("logout clicked");
+    dispatch({
+      type: "EMPTY_BASKET",
+    });
     localStorage.clear("user");
   };
   const navigate = useNavigate();

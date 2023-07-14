@@ -9,7 +9,7 @@ import axios from "../axios";
 import { useNavigate } from "react-router-dom";
 
 function Payment() {
-  const [{ address, basket }, user, dispatch] = useStateValue();
+  const [{ address, basket, user }, dispatch] = useStateValue();
   const [clientSecret, setClientSecret] = useState("");
   const elements = useElements();
   const stripe = useStripe();
@@ -17,14 +17,18 @@ function Payment() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchClientSecret = async () => {
-      const data = await axios.post("/payment/create", {
-        amount: getBasketTotal(basket),
-      });
-      setClientSecret(data.data.clientSecret);
-      console.log("client secret is >>", clientSecret);
-    };
-    fetchClientSecret();
+    try {
+      const fetchClientSecret = async () => {
+        const data = await axios.post("/payment/create", {
+          amount: getBasketTotal(basket),
+        });
+        setClientSecret(data.data.clientSecret);
+        console.log("client secret is >>", clientSecret);
+      };
+      fetchClientSecret();
+    } catch (err) {
+      console.log(err);
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -44,13 +48,13 @@ function Payment() {
           email: user?.email,
           address: address,
         });
-
-        dispatch({
-          type: "EMPTY_BASKET",
-        });
+        // console.log("reached");
         navigate("/homepage");
       })
       .catch((err) => console.warn(err));
+    dispatch({
+      type: "EMPTY_BASKET",
+    });
   };
 
   return (
